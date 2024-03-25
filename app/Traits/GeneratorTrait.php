@@ -23,7 +23,8 @@ trait GeneratorTrait
      */
     public function base64_encode($slug, $password): string
     {
-        $encoded = rtrim(strtr(base64_encode(`$slug:$password`), '+/', '-_'), '=');
+        $b64_encode = base64_encode($slug.":".$password);
+        $encoded = rtrim(strtr($b64_encode, '+/', '-_'), '=');
         return $encoded;
     }
 

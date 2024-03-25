@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Traits\GeneratorTrait;
 use App\Traits\ScryptTrait;
 use App\Models\PwTrack;
+use Illuminate\Http\Request;
 
 class PwTrackService
 {
@@ -38,5 +39,14 @@ class PwTrackService
         ]);
 
         return (new PwTrackResource($data));
+    }
+
+    public function showPassword(Request $request)
+    {
+        $pw_track = PwTrack::where('id', $request->id)->first();
+        $decrypted = $this->decrypt($pw_track->hashed_password);
+        $decoded = $this->base64_decode($decrypted);
+
+        return ['id' => $pw_track->id, 'decoded' => $decoded['password']];
     }
 }

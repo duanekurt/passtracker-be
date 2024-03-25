@@ -23,20 +23,26 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => '/v1'], function () {
-    Route::group(['prefix' => '/pw/track'], function () {
-        Route::get('/all', [PwTrackController::class, 'index']);
-        Route::post('/create', [PwTrackController::class, 'create']);
-    });
+    Route::group(['middleware' => ['auth:api']], function () {
+        Route::group(['prefix' => '/pw/track'], function () {
+            Route::get('/all', [PwTrackController::class, 'index']);
+            Route::post('/create', [PwTrackController::class, 'create']);
+            Route::post('/show-password', [PwTrackController::class, 'showPassword']);
+        });
 
-    Route::group(['prefix' => '/tag'], function () {
-        Route::post('/create', [TagsController::class, 'create']);
-    });
+        Route::group(['prefix' => '/tag'], function () {
+            Route::post('/create', [TagsController::class, 'create']);
+        });
 
-    Route::group(['prefix' => 'account-type'], function () {
-        Route::post('/create', [AccountTypeController::class, 'create']);
-        Route::get('/all', [AccountTypeController::class, 'all']);
-    });
+        Route::group(['prefix' => 'account-type'], function () {
+            Route::post('/create', [AccountTypeController::class, 'create']);
+            Route::get('/all', [AccountTypeController::class, 'all']);
+        });
 
+        Route::group(['prefix' => 'user'], function () {
+            Route::put('/set-master-password', [UsersController::class, 'setMasterPassword']);
+        });
+    });
     Route::group(['prefix' => 'user'], function () {
         Route::get('/exist/{email}', [UsersController::class, 'checkExist']);
     });

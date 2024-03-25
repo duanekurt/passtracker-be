@@ -21,7 +21,7 @@ class UsersController extends Controller
     {
         $validate = Validator::make(
             ['email' => $email],
-            ['email' => 'email']
+            ['email' => 'email|required']
         );
 
         if ($validate->fails()) {
@@ -42,5 +42,18 @@ class UsersController extends Controller
     {
         $resp = $this->userService->register($request);
         return $this->build_response_json($resp, 200, 'Register Success');
+    }
+
+    public function setMasterPassword(Request $request): JsonResponse
+    {
+        $this->validate($request, [
+            'master_password' => 'required|min:6|max:16',
+            'master_password_confirm' => 'required|same:master_password'
+        ], [
+            'master_password_confirm.same' => 'Master Passoword and Master Password Confirm should be matched.'
+        ]);
+
+        $resp = $this->userService->setMasterPassword($request);
+        return $this->build_response_json($resp, 200, 'Master Password updated');
     }
 }

@@ -25,7 +25,7 @@ class UserService
         }
 
         $token = [
-            'access_token' => $user->createToken($user->email)->accessToken->token
+            'access_token' => $user->createToken($user->email)->accessToken
         ];
 
         return ['token' => $token, 'user' => $user];
@@ -43,9 +43,19 @@ class UserService
         //send email here
 
         $token = [
-            'access_token' => $user->createToken($user->email)->accessToken->token
+            'access_token' => $user->createToken($user->email)->accessToken
         ];
 
         return ['token' => $token, 'user' => $user];
+    }
+
+    public function setMasterPassword(Request $request)
+    {
+        $user = User::where('id', auth()->user()->id)->first();
+
+        $user->master_password = bcrypt($request->master_password);
+        $user->save();
+
+        return ['user' => $user];
     }
 }
