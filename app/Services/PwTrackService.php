@@ -16,7 +16,7 @@ class PwTrackService
 
     public function getAll(array $filters)
     {
-        $data = PwTrack::with('account_type')->orderBy('created_at', 'DESC')->simplePaginate(6);
+        $data = PwTrack::where('user_id', Auth::user()->id)->with('account_type')->orderBy('created_at', 'DESC')->simplePaginate(6);
 
         return $data;
     }
@@ -34,8 +34,8 @@ class PwTrackService
             'account_type_id' => $request->account_type_id,
             // 'password' => $request->password,
             'password_for' => $request->password_for,
-            // 'user_id' => Auth::user()->id,
-            'user_id' => 1,
+            'user_id' => Auth::user()->id,
+            // 'user_id' => 1,
         ]);
 
         return (new PwTrackResource($data));

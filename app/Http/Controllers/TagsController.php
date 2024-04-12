@@ -16,6 +16,12 @@ class TagsController extends Controller
     ) {
     }
 
+    public function index()
+    {
+        $resp = $this->tagService->all();
+        return $this->build_response_json($resp, 200, 'Tags Fetched!');
+    }
+
     public function create(CreateTagsRequest $request): JsonResponse
     {
         $resp = $this->tagService->create($request->validated());

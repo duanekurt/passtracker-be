@@ -32,6 +32,7 @@ Route::group(['prefix' => '/v1'], function () {
 
         Route::group(['prefix' => '/tag'], function () {
             Route::post('/create', [TagsController::class, 'create']);
+            Route::get('/all', [TagsController::class, 'index']);
         });
 
         Route::group(['prefix' => 'account-type'], function () {
@@ -43,6 +44,8 @@ Route::group(['prefix' => '/v1'], function () {
             Route::put('/set-master-password', [UsersController::class, 'setMasterPassword']);
         });
     });
+
+
     Route::group(['prefix' => 'user'], function () {
         Route::get('/exist/{email}', [UsersController::class, 'checkExist']);
     });
